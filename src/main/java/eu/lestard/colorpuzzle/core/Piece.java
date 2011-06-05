@@ -1,4 +1,4 @@
-package eu.lestard.colorpuzzle.util;
+package eu.lestard.colorpuzzle.core;
 
 import java.awt.Color;
 
