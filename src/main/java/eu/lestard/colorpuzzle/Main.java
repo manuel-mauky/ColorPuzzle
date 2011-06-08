@@ -12,6 +12,8 @@ public class Main {
 	private static final int HEIGHT = 800;
 	private static final int WIDTH = 800;
 	
+	private boolean running = true;
+	
 	private GameCanvas canvas;
 	
 	/**
@@ -22,7 +24,6 @@ public class Main {
 	}
 	
 	private void go(){
-		System.out.println("ColorPuzzle starting...");
 		
 
 		JFrame frame = new JFrame("ColorPuzzle");
@@ -56,11 +57,11 @@ public class Main {
 	}
 	
 	private void loop(){
-		while(true){
+		while(running){
 			
 			
 			try {
-				Thread.sleep(10);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
