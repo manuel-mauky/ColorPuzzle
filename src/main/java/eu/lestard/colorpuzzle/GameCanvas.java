@@ -101,27 +101,21 @@ public class GameCanvas extends Canvas {
 		g.setColor(Color.red);
 		
 		
-//		for(int i=0 ; i<grid.getWidth() ; i++){
-//			int tempX = fieldX;
-//			for(int j=0 ; j<grid.getHeight() ; j++){
-//				
-//				g.setColor(grid.getPiece(i, j).getColor());
-//				
-//				
-//				g.fillRect(tempX, fieldY, fieldWidth, fieldHeight);
-//				g.setColor(Color.black);
-//				g.drawRect(tempX, fieldY, fieldWidth, fieldHeight);
-//				tempX = tempX + fieldWidth;				
-//			}
-//			fieldY = fieldY + fieldHeight;
-//		}
-//	
-		
-		g.setColor(Color.red);
-		Shape kreis = new Ellipse2D.Double(200,200,400,400);
-		g.fill(kreis);
-		
-		
+		for(int i=0 ; i<grid.getWidth() ; i++){
+			int tempX = fieldX;
+			for(int j=0 ; j<grid.getHeight() ; j++){
+				
+				g.setColor(grid.getPiece(i, j).getColor());
+				
+				
+				g.fillRect(tempX, fieldY, fieldWidth, fieldHeight);
+				g.setColor(Color.black);
+				g.drawRect(tempX, fieldY, fieldWidth, fieldHeight);
+				tempX = tempX + fieldWidth;				
+			}
+			fieldY = fieldY + fieldHeight;
+		}
+	
 		g.dispose();
 		strategy.show();
 		
