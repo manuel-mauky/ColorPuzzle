@@ -11,7 +11,7 @@ public class ColorChooser {
 	/**
 	 * Contructor for the ColorChooser 
 	 * 
-	 * @throws IllegalArgumentException if the given List is null or <code>size</code> is smaller then 1
+	 * @throws IllegalArgumentException if the given List is null or <code>size</code> is smaller than 1
 	 * 
 	 * @param colors List of Colors
 	 */
@@ -30,7 +30,7 @@ public class ColorChooser {
 	
 	/**
 	 * 
-	 * @return Color 
+	 * @return a random Color choosen from the specified List of colors 
 	 */
 	public Color getColor() {
 		if(colors == null){

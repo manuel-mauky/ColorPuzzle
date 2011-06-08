@@ -7,11 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+import java.util.List;
 
 import eu.lestard.colorpuzzle.core.Grid;
+import eu.lestard.colorpuzzle.util.ColorChooser;
 
 public class GameCanvas extends Canvas {
 	
@@ -20,10 +22,22 @@ public class GameCanvas extends Canvas {
 	
 	private Grid grid;
 	
+	private ColorChooser colorChooser;
+	
 	
 	public GameCanvas(){
-		grid = new Grid(8,8);
-		grid.fill();
+		List<Color> colors = new ArrayList<Color>();
+		
+		colors.add(Color.white);
+		colors.add(Color.black);
+		colors.add(Color.lightGray);
+		colors.add(Color.gray);
+		colors.add(Color.darkGray);
+		
+		colorChooser = new ColorChooser(colors);
+		
+		
+		grid = new Grid(8,8,colorChooser);
 		
 		setBounds(new Rectangle(WIDTH,HEIGHT));
 		setIgnoreRepaint(true);
