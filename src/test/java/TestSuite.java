@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 			eu.lestard.colorpuzzle.core.GridTest.class,
-			eu.lestard.colorpuzzle.util.ColorChooserTest.class
+			eu.lestard.colorpuzzle.core.GameLogicTest.class,
+			eu.lestard.colorpuzzle.util.ColorChooserTest.class,
 })
 
 

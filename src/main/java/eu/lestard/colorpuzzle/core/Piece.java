@@ -7,6 +7,14 @@ public class Piece {
 	private boolean selected;
 	
 	private Color color;
+	
+	public Piece(){
+	}
+
+	public Piece(Color color, boolean selected) {
+		setColor(color);
+		setSelected(selected);
+	}
 
 	public boolean isSelected() {
 		return selected;

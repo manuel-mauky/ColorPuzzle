@@ -91,6 +91,9 @@ public class Grid {
 			}
 		}
 		
+		
+		gridMap.get(new Point(0,0)).setSelected(true);
+		
 	}
 	
 	/**
@@ -117,6 +120,7 @@ public class Grid {
 	public int size(){
 		return gridMap.size();
 	}
+	
 	
 	
 }

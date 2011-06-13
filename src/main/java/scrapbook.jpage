@@ -1,0 +1,17 @@
+
+
+double a = 1000.000020000000000000000000001;
+double b = 20.00;
+
+double c = a / b;
+
+
+if(Math.IEEEremainder(a,b) == 0.0){
+	System.out.println("ganz");
+}else{
+	System.out.println("nicht ganz");
+}
+
+
+java.awt.Point x = new java.awt.Point(-1,1);
+System.out.println("Point: " + x);

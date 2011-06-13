@@ -30,7 +30,6 @@ public class GridTest {
 		
 		EasyMock.replay(colorChooserMock);
 		
-		colorChooserMock.getColor();
 		
 	}
 	
