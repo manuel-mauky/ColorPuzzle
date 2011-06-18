@@ -7,6 +7,16 @@ import java.util.List;
 
 
 public class GameLogic {
+	private int counter = 0;
+	
+	private Color selectedColor;
+	
+	
+	public int getCounter() {
+		return counter;
+	}
+
+
 	Grid grid;
 	private boolean finished = false;
 	
@@ -30,17 +40,21 @@ public class GameLogic {
 	
 	
 	public void setColor(Color color){
-		for(int i=0 ; i<grid.getHeight() ; i++){
-			for(int j=0 ; j<grid.getWidth() ; j++){
-				
-				if(grid.getPiece(i, j).isSelected()){
-					grid.getPiece(i, j).setColor(color);
-				}
-			}
+		Point temp = findFirstSelectedField();
+		
+		if(color != grid.getPiece(temp.x,temp.y).getColor()){
 			
+			counter++;
+			
+			for(int i=0 ; i<grid.getHeight() ; i++){
+				for(int j=0 ; j<grid.getWidth() ; j++){
+					
+					if(grid.getPiece(i, j).isSelected()){
+						grid.getPiece(i, j).setColor(color);
+					}
+				}				
+			}			
 		}
-		
-		
 	}
 	
 	private Point findFirstSelectedField(){
@@ -108,5 +122,6 @@ public class GameLogic {
 	}
 	
 	private List<Point> checkedPoints = new ArrayList<Point>();
+
 
 }

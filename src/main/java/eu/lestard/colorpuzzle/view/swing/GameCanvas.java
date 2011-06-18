@@ -1,4 +1,4 @@
-package eu.lestard.colorpuzzle;
+package eu.lestard.colorpuzzle.view.swing;
 
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -36,8 +36,7 @@ public class GameCanvas extends Canvas {
 	private int boardHeight; 
 	
 	
-	private boolean finished = true;
-	
+	private boolean finished = false;
 	
 	public boolean isFinished() {
 		return finished;
@@ -134,22 +133,23 @@ public class GameCanvas extends Canvas {
 		g.setColor(Color.black);
 		g.draw(background);
 		
-		for(String t : GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()){
-			System.out.println(t);
-		}
 		
 		Font finishFont = new Font("DejaVu Sans Mono",Font.PLAIN,40);
 		
 		Rectangle2D fontRect = g.getFontMetrics(finishFont).getStringBounds(Configurator.getWinMessage(), g);
 		
 		
+		int winMessageX = finishBackgroundX + (int)(finishBackgroundWidth - fontRect.getWidth())/2;
+		int winMessageY = finishBackgroundY + (int)((finishBackgroundHeight - fontRect.getHeight())/2 + fontRect.getHeight()/2);
+		
 		
 		g.setFont(finishFont);
-		g.drawString(Configurator.getWinMessage(), 
-				finishBackgroundX + (int)(finishBackgroundWidth - fontRect.getWidth())/2 ,
-				finishBackgroundY + (int)((finishBackgroundHeight - fontRect.getHeight())/2 + fontRect.getHeight()/2));
+		g.drawString(Configurator.getWinMessage(), winMessageX ,winMessageY);
 		
-	
+		finishFont = new Font("SansSerif", Font.PLAIN,30);
+		
+		g.setFont(finishFont);
+		
 		
 	}
 

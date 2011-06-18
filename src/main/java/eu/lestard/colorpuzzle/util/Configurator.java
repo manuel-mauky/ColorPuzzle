@@ -11,8 +11,8 @@ import eu.lestard.colorpuzzle.core.Shapes;
 public class Configurator {
 	
 	private static Shapes shape;
-	private static int width = 9;
-	private static int height = 9;
+	private static int width = 13;
+	private static int height = 13;
 	
 	private static List<Color> colors;
 	
