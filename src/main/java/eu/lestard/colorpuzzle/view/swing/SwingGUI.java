@@ -10,7 +10,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import eu.lestard.colorpuzzle.core.GameLogic;
 import eu.lestard.colorpuzzle.core.Grid;
@@ -25,41 +29,67 @@ public class SwingGUI {
 	
 	private GameCanvas canvas;
 	private GameLogic logic;
+	private Grid grid;
 	
 	private JLabel movesLabel;
 	
-	
+	private JFrame frame;
+	private JPanel panel;
 	public void go(){
 		
-		Grid grid = new Grid(Configurator.getHeight(),Configurator.getWidth(),new ColorChooser(Configurator.getColors()));
-		
-		logic = new GameLogic(grid);
-		logic.checkAndSelect();
-		
 
-		JFrame frame = new JFrame("ColorPuzzle");
-		JPanel panel = (JPanel) frame.getContentPane();
+		frame = new JFrame("ColorPuzzle");
+		panel = (JPanel) frame.getContentPane();
 		
 		panel.setLayout(new BorderLayout());
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		
+		
+		setUpGame();
+		
+		
+		frame.pack();
+		frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
+		
+		Thread gameThread = new Thread(canvas);
+		gameThread.setPriority(Thread.MIN_PRIORITY);
+		gameThread.start();
+		
+		frame.setVisible(true);
+		
+//		initCanvas();
+	}
+	
+	
+	private void setUpGame(){
+		grid = new Grid(Configurator.getHeight(),Configurator.getWidth(),new ColorChooser(Configurator.getColors()));
+		
+		logic = new GameLogic(grid);
+		logic.checkAndSelect();
+		
 		canvas = new GameCanvas(grid);
 		canvas.setBackground(Color.white);
 		canvas.setSize(WIDTH, HEIGHT);
 		
+
 		panel.add(canvas);
 		
-		JPanel buttonPanel = new JPanel();
+		JToolBar buttonToolbar = new JToolBar(JToolBar.VERTICAL);
 		
-		buttonPanel.setLayout(new GridLayout(Configurator.getColors().size()+1,1));
-		buttonPanel.setBackground(Color.white);
+		buttonToolbar.setFloatable(false);
+		buttonToolbar.setBackground(Color.white);
+		
+//		buttonPanel.setLayout(new GridLayout(Configurator.getColors().size()+1,1));
+//		buttonPanel.setBackground(Color.white);
 		
 		
 		
-		movesLabel = new JLabel("moves: 0");
+		frame.setJMenuBar(generateMenu());
 		
-		buttonPanel.add(movesLabel);
+		
 		
 		
 		
@@ -98,22 +128,93 @@ public class SwingGUI {
 			});
 			
 			
-			buttonPanel.add(temp);
+			buttonToolbar.add(temp);
 		}
 		
 		
 		
-		panel.add(buttonPanel,BorderLayout.LINE_END);
+		panel.add(buttonToolbar,BorderLayout.LINE_END);
 		
-		frame.pack();
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
 		
-		frame.setVisible(true);
 		
-		canvas.init();
-		canvas.render();
 	}
+	
+	
+	
+	
+
+	private JMenuBar generateMenu() {
+		
+		JMenuBar menuBar;
+		JMenu menu;
+		
+		
+		
+		
+		menuBar = new JMenuBar();
+		
+		menu = new JMenu("Game");
+		
+		menuBar.add(menu);
+		
+		
+		JMenuItem menuItemPlayAgain = new JMenuItem("New Game");
+		menuItemPlayAgain.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.setVisible(false);
+				
+				go();
+			
+			}
+			
+		});
+		menu.add(menuItemPlayAgain);
+		
+		
+		JMenuItem menuItemSettings = new JMenuItem("Settings");
+		menuItemSettings.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Not Implemented yet");
+			}
+			
+		});
+		
+		menu.add(menuItemSettings);
+		
+		
+		
+		JMenuItem menuItemExit = new JMenuItem("Exit");
+		menuItemExit.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.setVisible(false);
+				System.exit(0);				
+			}
+		});
+		
+		menu.addSeparator();
+		
+		menu.add(menuItemExit);
+		
+		
+		
+		movesLabel = new JLabel("moves: 0");
+		
+		
+		
+		menuBar.add(movesLabel);
+		
+		
+		return menuBar;
+	}
+	
+	
+	
 	
 
 }

@@ -18,7 +18,7 @@ import eu.lestard.colorpuzzle.core.Grid;
 import eu.lestard.colorpuzzle.util.ColorChooser;
 import eu.lestard.colorpuzzle.util.Configurator;
 
-public class GameCanvas extends Canvas {
+public class GameCanvas extends Canvas implements Runnable{
 	
 	private static final int BORDER_PADDING = 20;
 	private static final Color BOARD_BACKGROUND_COLOR = new Color(150,150,150);
@@ -32,11 +32,16 @@ public class GameCanvas extends Canvas {
 	private ColorChooser colorChooser;
 	
 	private static final int BORDER = 10;
+	
 	private int boardWidth;
 	private int boardHeight; 
 	
+	private boolean isRunning; 
+	private static final int FRAME_DELAY = 20;
+	
 	
 	private boolean finished = false;
+	private long cycleTime;
 	
 	public boolean isFinished() {
 		return finished;
@@ -48,6 +53,8 @@ public class GameCanvas extends Canvas {
 
 	public GameCanvas(Grid grid){
 
+		isRunning = true;
+		
 		this.grid = grid;
 		
 		colorChooser = new ColorChooser(Configurator.getColors());
@@ -58,15 +65,36 @@ public class GameCanvas extends Canvas {
 		setIgnoreRepaint(true);
 	}
 	
-	public void init(){		
+	@Override
+	public void run(){
+		
+		cycleTime = System.currentTimeMillis();
+		
 		createBufferStrategy(2);		
 		strategy = getBufferStrategy();		
 		
 		boardWidth = getWidth() - (2 * BORDER);
 		boardHeight = getHeight() - (2 * BORDER);
 		
-		render();
+		
+		while(isRunning){
+			
+			render();
+			
+			cycleTime = cycleTime + FRAME_DELAY;
+			
+			long difference = cycleTime - System.currentTimeMillis();
+			
+			try{
+				Thread.sleep(Math.max(0, difference));
+			}catch (InterruptedException e){
+				e.printStackTrace();
+			}
+			
+		}
 	}
+	
+	
 	
 	public void render(){		
 		g = (Graphics2D) strategy.getDrawGraphics();
