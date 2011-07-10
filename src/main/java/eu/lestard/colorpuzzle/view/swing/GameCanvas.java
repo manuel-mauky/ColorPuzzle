@@ -3,53 +3,41 @@ package eu.lestard.colorpuzzle.view.swing;
 import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferStrategy;
 
 import eu.lestard.colorpuzzle.core.Grid;
-import eu.lestard.colorpuzzle.util.ColorChooser;
-import eu.lestard.colorpuzzle.util.Configurator;
+import eu.lestard.colorpuzzle.view.swing.drawables.FinishBoard;
 
 public class GameCanvas extends Canvas implements Runnable{
+	private Grid grid;
 	
-	private static final int BORDER_PADDING = 20;
-	private static final Color BOARD_BACKGROUND_COLOR = new Color(150,150,150);
-	private static final Color BOARD_BACKGROUND_SHADOW_COLOR = new Color(210,210,210);
-	private static final Color BOARD_BACKGROUND_BORDER_COLOR = new Color(100,100,100);
 	private BufferStrategy strategy;
 	private Graphics2D g;
 	
-	private Grid grid;
 	
-	private ColorChooser colorChooser;
+	private final int BORDER_PADDING = 20;
+	private final Color BOARD_BACKGROUND_COLOR = new Color(150,150,150);
+	private final Color BOARD_BACKGROUND_SHADOW_COLOR = new Color(210,210,210);
+	private final Color BOARD_BACKGROUND_BORDER_COLOR = new Color(100,100,100);
 	
-	private static final int BORDER = 10;
+	private final int BORDER = 10;
 	
 	private int boardWidth;
 	private int boardHeight; 
 	
 	private boolean isRunning; 
-	private static final int FRAME_DELAY = 20;
+	private final int FRAME_DELAY = 20;
 	
 	
 	private boolean finished = false;
 	private long cycleTime;
 	
-	public boolean isFinished() {
-		return finished;
-	}
-
-	public void setFinished(boolean finished) {
-		this.finished = finished;
-	}
+	
 
 	public GameCanvas(Grid grid){
 
@@ -57,9 +45,6 @@ public class GameCanvas extends Canvas implements Runnable{
 		
 		this.grid = grid;
 		
-		colorChooser = new ColorChooser(Configurator.getColors());
-		
-//		grid = new Grid(Configurator.getHeight(),Configurator.getWidth(),colorChooser);
 		
 		setBounds(new Rectangle(WIDTH,HEIGHT));
 		setIgnoreRepaint(true);
@@ -125,60 +110,9 @@ public class GameCanvas extends Canvas implements Runnable{
 	private void drawFinish() {
 		System.out.println("Finished");
 		
+		FinishBoard finishBoard = new FinishBoard(boardWidth, boardHeight);
 		
-		
-		int finishBackgroundWidth = boardWidth/2;
-		int finishBackgroundHeight = boardHeight/2;
-		
-		int finishBackgroundX = finishBackgroundWidth/2;
-		int finishBackgroundY = finishBackgroundHeight/2;
-		
-		int arch = 20;
-		
-		int shadowOffset = 5;
-		
-		Shape background = new RoundRectangle2D.Double(finishBackgroundX,finishBackgroundY,finishBackgroundWidth,finishBackgroundHeight, arch, arch);
-		
-		Shape shadow = new RoundRectangle2D.Double(finishBackgroundX + shadowOffset,
-				finishBackgroundY + shadowOffset,
-				finishBackgroundWidth + shadowOffset,
-				finishBackgroundHeight + shadowOffset,
-				arch, arch);
-		
-		g.setColor(new Color(0,0,0,120));
-		g.fill(shadow);
-		
-		
-		
-		
-		
-		
-		g.setColor(Color.white);
-		g.fill(background);
-		
-		g.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));		
-		
-		g.setColor(Color.black);
-		g.draw(background);
-		
-		
-		Font finishFont = new Font("DejaVu Sans Mono",Font.PLAIN,40);
-		
-		Rectangle2D fontRect = g.getFontMetrics(finishFont).getStringBounds(Configurator.getWinMessage(), g);
-		
-		
-		int winMessageX = finishBackgroundX + (int)(finishBackgroundWidth - fontRect.getWidth())/2;
-		int winMessageY = finishBackgroundY + (int)((finishBackgroundHeight - fontRect.getHeight())/2 + fontRect.getHeight()/2);
-		
-		
-		g.setFont(finishFont);
-		g.drawString(Configurator.getWinMessage(), winMessageX ,winMessageY);
-		
-		finishFont = new Font("SansSerif", Font.PLAIN,30);
-		
-		g.setFont(finishFont);
-		
-		
+		finishBoard.draw(g);
 	}
 
 	/**
@@ -265,7 +199,13 @@ public class GameCanvas extends Canvas implements Runnable{
 		g.draw(board);
 	}
 
-	
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
+	}
 	
 	
 }

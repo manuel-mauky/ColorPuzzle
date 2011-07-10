@@ -12,7 +12,7 @@ public class Main {
 	}
 	
 	public void go(){
-		new SwingGUI().go();
+		new SwingGUI().createGui();
 	}
 	
 }

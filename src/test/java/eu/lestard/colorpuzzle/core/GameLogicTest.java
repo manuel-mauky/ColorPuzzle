@@ -46,6 +46,36 @@ public class GameLogicTest {
 		
 	}
 	
+
+	
+	@Test
+	public void testSetColor(){
+		Grid grid = new Grid(3,3,colorChooserMock);
+		
+		
+		grid.getPiece(0, 0).setColor(Color.red);
+		grid.getPiece(0, 1).setColor(Color.red);
+		grid.getPiece(1, 0).setColor(Color.blue);
+		
+		
+		GameLogic logic = new GameLogic(grid);
+		
+		logic.checkAndSelect();
+		
+		logic.setColor(Color.green);
+		
+		
+		assertTrue(grid.getPiece(0, 0).isSelected());
+		assertTrue(grid.getPiece(0, 1).isSelected());
+		
+		
+		
+		
+		assertEquals(Color.green,grid.getPiece(0,0).getColor());
+		assertEquals(Color.green,grid.getPiece(0,1).getColor());
+		assertEquals(Color.blue,grid.getPiece(1,0).getColor());
+		
+	}
 	
 	
 	@Test
@@ -64,6 +94,9 @@ public class GameLogicTest {
 		
 		//Same for the width
 		EasyMock.expect(gridMock.getWidth()).andReturn(y);
+		EasyMock.expectLastCall().anyTimes();
+		
+		EasyMock.expect(gridMock.size()).andReturn(x*y);
 		EasyMock.expectLastCall().anyTimes();
 		
 		

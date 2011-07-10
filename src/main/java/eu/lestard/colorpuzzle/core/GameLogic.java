@@ -5,50 +5,47 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.lestard.colorpuzzle.core.listener.PointCountListener;
+
 
 public class GameLogic {
 	private int counter = 0;
-	
 	private Color selectedColor;
-	
-	
-	public int getCounter() {
-		return counter;
-	}
-
-
-	Grid grid;
+	private Grid grid;
 	private boolean finished = false;
+	private List<Point> checkedPoints = new ArrayList<Point>();
 	
+	private List<PointCountListener> pointCountListeners;
 	
-	public boolean isFinished() {
-		return finished;
-	}
-
-
-
-	public void setFinished(boolean finished) {
-		this.finished = finished;
-	}
-
-
-
 	public GameLogic(Grid grid){
 		this.grid = grid;
+		
+		pointCountListeners = new ArrayList<PointCountListener>();
 	}
 	
+	
+	public void addPointCountListener(PointCountListener listener){
+		pointCountListeners.add(listener);
+	}
+	
+	public void removePointCountListener(PointCountListener listener){
+		pointCountListeners.remove(listener);
+	}
+	
+	private void notifiyPointCountListeners(){
+		for(PointCountListener p : pointCountListeners){
+			p.update(getCounter());
+		}
+	}
 	
 	
 	public void setColor(Color color){
 		Point temp = findFirstSelectedField();
 		
 		if(color != grid.getPiece(temp.x,temp.y).getColor()){
-			
 			counter++;
-			
 			for(int i=0 ; i<grid.getHeight() ; i++){
 				for(int j=0 ; j<grid.getWidth() ; j++){
-					
 					if(grid.getPiece(i, j).isSelected()){
 						grid.getPiece(i, j).setColor(color);
 					}
@@ -79,6 +76,8 @@ public class GameLogic {
 		}
 
 		checkNeighbours(temp);
+		
+		notifiyPointCountListeners();
 		
 		if(checkedPoints.size() == grid.size()){
 			finished  = true;
@@ -121,7 +120,17 @@ public class GameLogic {
 		
 	}
 	
-	private List<Point> checkedPoints = new ArrayList<Point>();
 
+	public int getCounter() {
+		return counter;
+	}
+	
+	public boolean isFinished() {
+		return finished;
+	}
+	
+	public void setFinished(boolean finished) {
+		this.finished = finished;
+	}
 
 }
