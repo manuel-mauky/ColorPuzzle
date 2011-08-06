@@ -77,7 +77,7 @@ public class Grid {
 		return dimension.height;
 	}
 
-	private void fill(){
+	public void fill(){
 		for(int x=0 ; x<dimension.width ; x++){
 			for(int y=0 ; y<dimension.height ; y++){
 				
@@ -119,6 +119,11 @@ public class Grid {
 	 */
 	public int size(){
 		return gridMap.size();
+	}
+
+
+	public List<Piece> getPieces() {
+		return new ArrayList(gridMap.values());
 	}
 	
 	

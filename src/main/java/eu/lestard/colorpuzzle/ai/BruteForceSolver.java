@@ -5,7 +5,7 @@ import java.awt.Color;
 import eu.lestard.colorpuzzle.core.GameLogic;
 import eu.lestard.colorpuzzle.util.Configurator;
 
-public class BruteForceAI implements ArtificialIntelligence {
+public class BruteForceSolver implements ArtificialIntelligence {
 
 	@Override
 	public void solve(GameLogic logic) {
@@ -13,7 +13,6 @@ public class BruteForceAI implements ArtificialIntelligence {
 		while(!logic.isFinished()){
 			
 			for(Color c : Configurator.getColors()){
-				System.out.println("trying " + c);
 				
 				logic.setColor(c);	
 				logic.checkAndSelect();
@@ -23,12 +22,11 @@ public class BruteForceAI implements ArtificialIntelligence {
 				}
 				
 				try {
-					Thread.sleep(100);
+					Thread.sleep(Configurator.getAiDelay());
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 			
 			

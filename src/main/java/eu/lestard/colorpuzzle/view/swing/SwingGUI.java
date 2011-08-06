@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import eu.lestard.colorpuzzle.ai.ArtificialIntelligence;
-import eu.lestard.colorpuzzle.ai.BruteForceAI;
+import eu.lestard.colorpuzzle.ai.BogoSolver;
 import eu.lestard.colorpuzzle.core.GameLogic;
 import eu.lestard.colorpuzzle.core.Grid;
 import eu.lestard.colorpuzzle.core.listener.PointCountListener;
@@ -38,6 +38,12 @@ public class SwingGUI {
 	
 	private JFrame frame;
 	private JPanel panel;
+	
+	public SwingGUI(GameLogic logic){
+		this.logic = logic;
+	}
+	
+	
 	public void createGui(){
 
 		frame = new JFrame("ColorPuzzle");
@@ -104,7 +110,7 @@ public class SwingGUI {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Solving");
-				ArtificialIntelligence ai = new BruteForceAI();
+				ArtificialIntelligence ai = Configurator.getAI();
 				ai.solve(logic);
 				
 			}
@@ -119,10 +125,11 @@ public class SwingGUI {
 	
 	
 	private GameCanvas createGameCanvas(){
-		grid = new Grid(Configurator.getHeight(),Configurator.getWidth(),new ColorChooser(Configurator.getColors()));
 		
-		logic = new GameLogic(grid);
+
 		logic.checkAndSelect();
+		
+		grid = logic.getGrid();
 		
 		canvas = new GameCanvas(grid);
 		canvas.setBackground(Color.white);
@@ -171,7 +178,11 @@ public class SwingGUI {
 		menuItemPlayAgain.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
+				closeWindow();
+				
+				logic.reset();
+				logic.setFinished(false);
+				
 				createGui();
 			}
 		});
@@ -195,7 +206,7 @@ public class SwingGUI {
 		menuItemExit.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				frame.setVisible(false);
+				closeWindow();
 				System.exit(0);				
 			}
 		});
@@ -205,7 +216,7 @@ public class SwingGUI {
 		
 		menu.add(menuItemExit);
 		
-		movesLabel = new JLabel("moves: 0");
+		movesLabel = new JLabel();
 		
 		logic.addPointCountListener(new PointCountListener() {
 			
@@ -217,6 +228,8 @@ public class SwingGUI {
 			}
 		});
 		
+		logic.notifiyPointCountListeners();
+		
 		menuBar.add(movesLabel);
 		
 		
@@ -224,6 +237,22 @@ public class SwingGUI {
 		return menuBar;
 	}
 	
+	protected void newGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	/**
+	 * 
+	 */
+	public void closeWindow() {
+		
+		if(frame != null){
+			frame.setVisible(false);
+		}
+	}
+
 	/**
 	 * ActionListener for the SetColor-Buttons
 	 * 

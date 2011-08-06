@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.lestard.colorpuzzle.core.listener.FinishListener;
 import eu.lestard.colorpuzzle.core.listener.PointCountListener;
 
 
@@ -15,12 +16,14 @@ public class GameLogic {
 	private boolean finished = false;
 	private List<Point> checkedPoints = new ArrayList<Point>();
 	
+	private List<FinishListener> finishListeners;
 	private List<PointCountListener> pointCountListeners;
 	
 	public GameLogic(Grid grid){
 		this.grid = grid;
 		
 		pointCountListeners = new ArrayList<PointCountListener>();
+		finishListeners = new ArrayList<FinishListener>();
 	}
 	
 	
@@ -32,11 +35,26 @@ public class GameLogic {
 		pointCountListeners.remove(listener);
 	}
 	
-	private void notifiyPointCountListeners(){
+	public void notifiyPointCountListeners(){
 		for(PointCountListener p : pointCountListeners){
 			p.update(getCounter());
 		}
 	}
+	
+	
+	public void addFinishListener(FinishListener listener){
+		finishListeners.add(listener);
+	}
+	public void removeFinishListeners(FinishListener listener){
+		finishListeners.remove(listener);
+	}
+	public void notifyFinishListeners(){
+		for(FinishListener f : finishListeners){
+			f.update(isFinished());
+		}
+	}
+	
+	
 	
 	
 	public void setColor(Color color){
@@ -81,6 +99,7 @@ public class GameLogic {
 		
 		if(checkedPoints.size() == grid.size()){
 			finished  = true;
+			notifyFinishListeners();
 		}
 	}
 
@@ -88,6 +107,7 @@ public class GameLogic {
 		if(point == null){
 			return;
 		}
+		
 		//If the point has already been checked we don't want to do it again
 		if(checkedPoints.contains(point)){
 			return;
@@ -120,6 +140,7 @@ public class GameLogic {
 		
 	}
 	
+	
 
 	public int getCounter() {
 		return counter;
@@ -131,6 +152,17 @@ public class GameLogic {
 	
 	public void setFinished(boolean finished) {
 		this.finished = finished;
+	}
+
+
+	public Grid getGrid() {
+		return grid;
+	}
+
+
+	public void reset() {
+		counter = 0;
+		grid.fill();
 	}
 
 }

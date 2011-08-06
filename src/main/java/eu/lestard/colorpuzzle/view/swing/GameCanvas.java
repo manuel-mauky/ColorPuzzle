@@ -48,6 +48,8 @@ public class GameCanvas extends Canvas implements Runnable{
 		
 		setBounds(new Rectangle(WIDTH,HEIGHT));
 		setIgnoreRepaint(true);
+		
+		
 	}
 	
 	@Override
