@@ -1,6 +1,7 @@
 package eu.lestard.colorpuzzle.core;
 
-import static org.junit.Assert.*;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -64,16 +65,13 @@ public class GameLogicTest {
 		
 		logic.setColor(Color.green);
 		
-		
-		assertTrue(grid.getPiece(0, 0).isSelected());
-		assertTrue(grid.getPiece(0, 1).isSelected());
-		
+		assertThat(grid.getPiece(0,0).isSelected()).isTrue();
+		assertThat(grid.getPiece(0, 1).isSelected()).isTrue();
 		
 		
-		
-		assertEquals(Color.green,grid.getPiece(0,0).getColor());
-		assertEquals(Color.green,grid.getPiece(0,1).getColor());
-		assertEquals(Color.blue,grid.getPiece(1,0).getColor());
+		assertThat(grid.getPiece(0,0).getColor()).isEqualTo(Color.green);
+		assertThat(grid.getPiece(0, 1).getColor()).isEqualTo(Color.green);
+		assertThat(grid.getPiece(1,0).getColor()).isEqualTo(Color.blue);
 		
 	}
 	
@@ -222,15 +220,15 @@ public class GameLogicTest {
 		
 		logic.checkAndSelect();
 		
-		assertEquals(startPiece.getColor(),Color.blue);
-		assertTrue(startPiece.isSelected());
+		assertThat(startPiece.getColor()).isEqualTo(Color.blue);
+		assertThat(startPiece.isSelected()).isTrue();
 
 		
 		//Now the player clicks on a new Color (in our case magenta)
 		logic.setColor(Color.magenta);
 		
 		//Now the Color of the startPiece should be magenta.
-		assertEquals(startPiece.getColor(),Color.magenta);
+		assertThat(startPiece.getColor()).isEqualTo(Color.magenta);
 		
 		/*
 		 * The letter stands for the color (g=green,b=blue,m=magenta,r=red)
@@ -251,7 +249,7 @@ public class GameLogicTest {
 		logic.checkAndSelect();
 		
 		//Of cource the startPiece should still be selected 
-		assertTrue(startPiece.isSelected());
+		assertThat(startPiece.isSelected()).isTrue();
 		
 		//There are 2 pieces which are direct neighbours of the startpiece and have the same color
 		selectedPieces.add(pieces[2][3]);
@@ -271,10 +269,10 @@ public class GameLogicTest {
 				//If the piece is in the List for selected pieces ...
 				if(selectedPieces.contains(pieces[i][j])){
 					//it should be marked as selected
-					assertTrue(pieces[i][j].isSelected());
+					assertThat(pieces[i][j].isSelected()).isTrue();
 				}else{
 					//...otherwise it should not be marked as selected
-					assertFalse(pieces[i][j].isSelected());
+					assertThat(pieces[i][j].isSelected()).isFalse();
 				}
 			}
 			System.out.println();
@@ -316,10 +314,10 @@ public class GameLogicTest {
 				//If the piece is in the List for selected pieces ...
 				if(selectedPieces.contains(pieces[i][j])){
 					//it should be marked as selected
-					assertTrue("Piece: expected true i:" + i +" j:" + j ,pieces[i][j].isSelected());
+					assertThat(pieces[i][j].isSelected()).as("Piece i:"+i + " j:" + j).isTrue();
 				}else{
 					//...otherwise it should not be marked as selected
-					assertFalse("Piece: expected false i:" + i +" j:" + j ,pieces[i][j].isSelected());
+					assertThat(pieces[i][j].isSelected()).as("Piece i:"+i + " j:" + j).isFalse();
 				}
 			}
 			System.out.println();

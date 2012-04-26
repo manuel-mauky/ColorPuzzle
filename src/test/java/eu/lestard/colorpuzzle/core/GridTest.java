@@ -1,12 +1,9 @@
 package eu.lestard.colorpuzzle.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+
+import static org.fest.assertions.Assertions.assertThat;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -46,19 +43,17 @@ public class GridTest {
 				
 				Piece temp = grid.getPiece(i,j);
 				
-				assertNotNull(temp);
-				assertNotNull(temp.getColor());
-				
+				assertThat(temp).isNotNull();
+				assertThat(temp.getColor()).isNotNull();
 				
 			}
 		}
+
+		assertThat(grid.getPiece(width, height + 1)).isNull();
+		assertThat(grid.getPiece(width + 1, height)).isNull();
+		assertThat(grid.size()).isEqualTo(height * width);
 		
-		assertNull(grid.getPiece(width, height + 1));
-		assertNull(grid.getPiece(width + 1, height));
-		
-		assertEquals("size", (height*width), grid.size());
-	}
-	
+	}	
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testGridConstructorFail1(){

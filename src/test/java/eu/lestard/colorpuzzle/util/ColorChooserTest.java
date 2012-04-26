@@ -1,13 +1,14 @@
 package eu.lestard.colorpuzzle.util;
 
 
-import static org.junit.Assert.*;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
+import org.fest.assertions.Delta;
 import org.junit.Test;
 
 public class ColorChooserTest {
@@ -25,7 +26,7 @@ public class ColorChooserTest {
 		
 		colorChooser = new ColorChooser(colors);
 		
-		assertTrue("generated Color is valid", colors.contains(colorChooser.getColor()));
+		assertThat(colors).as("generated Color is valid").contains(colorChooser.getColor());
 	
 		List<Color> colors2 = new ArrayList<Color>();
 		colors2.add(Color.black);
@@ -34,8 +35,8 @@ public class ColorChooserTest {
 		
 		colorChooser = new ColorChooser(colors2);
 		
-		assertTrue(colors2.contains(colorChooser.getColor()));
-		assertFalse(colors.contains(colorChooser.getColor()));
+		assertThat(colors2).contains(colorChooser.getColor());
+		assertThat(colors).excludes(colorChooser.getColor());
 		
 	
 	}
@@ -88,14 +89,13 @@ public class ColorChooserTest {
 			}
 		}
 		
-		int expectedValue = randomSampleSize / 4;
-		int variance = expectedValue / 10; 
-		
-		assertEquals(blueCounter, expectedValue, variance);
-		assertEquals(redCounter, expectedValue, variance);
-		assertEquals(greenCounter, expectedValue, variance);
-		assertEquals(yellowCounter, expectedValue, variance);
-		
+		double expectedValue = randomSampleSize / 4;
+		double variance = expectedValue / 10; 
+
+		assertThat((double)blueCounter).isEqualTo(expectedValue, Delta.delta(variance));
+		assertThat((double)redCounter).isEqualTo(expectedValue, Delta.delta(variance));
+		assertThat((double)greenCounter).isEqualTo(expectedValue, Delta.delta(variance));
+		assertThat((double)yellowCounter).isEqualTo(expectedValue, Delta.delta(variance));
 	}
 	
 	
