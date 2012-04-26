@@ -110,8 +110,6 @@ public class GameCanvas extends Canvas implements Runnable{
 	}
 
 	private void drawFinish() {
-		System.out.println("Finished");
-		
 		FinishBoard finishBoard = new FinishBoard(boardWidth, boardHeight);
 		
 		finishBoard.draw(g);
