@@ -2,15 +2,20 @@ package eu.lestard.colorpuzzle.core;
 
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.AdditionalMatchers.gt;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import eu.lestard.colorpuzzle.util.ColorChooser;
 
@@ -26,10 +31,10 @@ public class GameLogicTest {
 	@Before
 	public void setUp(){
 		//We need to mock the ColorChooser		
-		colorChooserMock = EasyMock.createMock(ColorChooser.class);
+		colorChooserMock = mock(ColorChooser.class);
 		
 		//The Colors from which the mock can choose
-		List<Color> colors = new ArrayList<Color>();
+		final List<Color> colors = new ArrayList<Color>();
 		colors.add(Color.red);
 		colors.add(Color.blue);
 		colors.add(Color.green);
@@ -37,13 +42,13 @@ public class GameLogicTest {
 		
 		
 		//The mock should return a random color for every call of the getColor method
-		//The method is called field in the grid (x * y)
-		for(int i=0 ; i < (x*y) ; i++){
-			Collections.shuffle(colors);
-			EasyMock.expect(colorChooserMock.getColor()).andReturn(colors.get(0));
-		}
-		
-		EasyMock.replay(colorChooserMock);
+		when(colorChooserMock.getColor()).thenAnswer(new Answer<Color>(){
+			@Override
+			public Color answer(InvocationOnMock invocation) throws Throwable {
+				Collections.shuffle(colors);
+				return colors.get(0);
+			}
+		});
 		
 	}
 	
@@ -84,21 +89,14 @@ public class GameLogicTest {
 		
 		
 		//We need a Mock for the Grid
-		Grid gridMock = EasyMock.createMock(Grid.class);
+		Grid gridMock = mock(Grid.class);
 		
 		//Return the value for the height as often it is requested
-		EasyMock.expect(gridMock.getHeight()).andReturn(x);
-		EasyMock.expectLastCall().anyTimes();
+		when(gridMock.getHeight()).thenReturn(x);
 		
-		//Same for the width
-		EasyMock.expect(gridMock.getWidth()).andReturn(y);
-		EasyMock.expectLastCall().anyTimes();
-		
-		EasyMock.expect(gridMock.size()).andReturn(x*y);
-		EasyMock.expectLastCall().anyTimes();
-		
-		
-		
+		//Same for the width and Size
+		when(gridMock.getWidth()).thenReturn(y);
+		when(gridMock.size()).thenReturn(x*y);
 		
 		
 		
@@ -164,25 +162,16 @@ public class GameLogicTest {
 		//Configure the Mock to return the expected Pieces
 		for(int i=0 ; i<pieces.length ; i++){
 			for(int j=0 ; j<pieces[0].length ; j++){
-				EasyMock.expect(gridMock.getPiece(i,j)).andReturn(pieces[i][j]);
-				EasyMock.expectLastCall().anyTimes();
+				when(gridMock.getPiece(i, j)).thenReturn(pieces[i][j]);
 			}
 		}
 		
+
 		
 		//We have to prepare the mock to return null if the piece is not in the grid
+		when(gridMock.getPiece(gt(x-1), anyInt())).thenReturn(null);
 		
-		EasyMock.expect(gridMock.getPiece(EasyMock.gt(x-1),EasyMock.anyInt())).andReturn(null);
-		EasyMock.expectLastCall().anyTimes();
-		
-		EasyMock.expect(gridMock.getPiece(EasyMock.anyInt(),EasyMock.gt(y-1))).andReturn(null);
-		EasyMock.expectLastCall().anyTimes();
-		
-	
-		
-		
-		//The Mock is ready
-		EasyMock.replay(gridMock);
+		when(gridMock.getPiece(anyInt(), gt(y-1))).thenReturn(null);
 		
 		
 		//All selected pieces we will store in a List
@@ -193,15 +182,9 @@ public class GameLogicTest {
 		
 		
 		
-	
-		
 		
 		GameLogic logic = new GameLogic(gridMock);
 
-		
-		
-		
-		
 		//Call the checkAndSelect method. 
 		//Nothing has changed yet so the method should not find anything
 		/*
@@ -244,7 +227,6 @@ public class GameLogicTest {
 		 * 
 		 */
 		
-		System.out.println("\n\n\n\n\n\n");
 		//Now we check if there are other Pieces in the Grid which should be selected
 		logic.checkAndSelect();
 		
@@ -275,7 +257,6 @@ public class GameLogicTest {
 					assertThat(pieces[i][j].isSelected()).isFalse();
 				}
 			}
-			System.out.println();
 		}
 		
 		
@@ -320,10 +301,7 @@ public class GameLogicTest {
 					assertThat(pieces[i][j].isSelected()).as("Piece i:"+i + " j:" + j).isFalse();
 				}
 			}
-			System.out.println();
 		}
-		
-		
 	}
 
 }

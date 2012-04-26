@@ -2,10 +2,11 @@ package eu.lestard.colorpuzzle.core;
 
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.awt.Color;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,15 +20,8 @@ public class GridTest {
 	
 	@Before
 	public void setUp(){
-		colorChooserMock = EasyMock.createMock(ColorChooser.class);
-		
-		EasyMock.expect(colorChooserMock.getColor()).andReturn(Color.red);
-		EasyMock.expectLastCall().anyTimes();
-		
-		
-		EasyMock.replay(colorChooserMock);
-		
-		
+		colorChooserMock = mock(ColorChooser.class);
+		when(colorChooserMock.getColor()).thenReturn(Color.red);
 	}
 	
 	@Test
