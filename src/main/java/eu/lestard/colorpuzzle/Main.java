@@ -22,6 +22,8 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(final String[] args) {
+		System.out
+				.println("Wrong Main class. Use org.jboss.weld.environment.se.StartMain instead");
 		// new Main().go(null);
 	}
 
