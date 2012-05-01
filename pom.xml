@@ -54,7 +54,6 @@
 			<version>1.9.0</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
@@ -64,6 +63,13 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.0.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+			<version>1.1.8.Final</version>
 		</dependency>
 	</dependencies>
 </project>

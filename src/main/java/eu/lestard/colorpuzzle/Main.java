@@ -1,7 +1,10 @@
 package eu.lestard.colorpuzzle;
 
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import org.jboss.weld.environment.se.events.ContainerInitialized;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.lestard.colorpuzzle.core.GameLogic;
 import eu.lestard.colorpuzzle.core.Grid;
@@ -12,17 +15,19 @@ import eu.lestard.colorpuzzle.view.swing.SwingGUI;
 
 public class Main {
 
-	private static final Logger log = LoggerFactory.getLogger(Main.class);
+	@Inject
+	private Logger log;
 
 	/**
 	 * @param args
 	 */
 	public static void main(final String[] args) {
-		new Main().go();
+		// new Main().go(null);
 	}
 
-	public void go() {
+	public void go(@Observes final ContainerInitialized event) {
 		log.info("ColorPuzzle started");
+
 
 		Grid grid = new Grid(Configurator.getHeight(), Configurator.getWidth(),
 				new ColorChooser(Configurator.getColors()));
