@@ -35,20 +35,23 @@ public class GameCanvas extends JPanel {
 
 	private static final int BORDER_PADDING = 20;
 	private static final Color BOARD_BACKGROUND_COLOR = new Color(150, 150, 150);
-	private static final Color BOARD_BACKGROUND_SHADOW_COLOR = new Color(210, 210, 210);
-	private static final Color BOARD_BACKGROUND_BORDER_COLOR = new Color(100, 100, 100);
+	private static final Color BOARD_BACKGROUND_SHADOW_COLOR = new Color(210,
+			210, 210);
+	private static final Color BOARD_BACKGROUND_BORDER_COLOR = new Color(100,
+			100, 100);
 
 	private static final int BORDER = 10;
 
 	private int boardWidth;
 	private int boardHeight;
 
-	private Grid grid;
-	
+	private final Grid grid;
+
 	private boolean finished = false;
 
 	@Inject
-	public GameCanvas(@Width int width, @Height int height, Grid grid) {
+	public GameCanvas(@Width final int width, @Height final int height,
+			final Grid grid) {
 
 		this.grid = grid;
 
@@ -62,29 +65,30 @@ public class GameCanvas extends JPanel {
 	}
 
 	@Override
-	public void paintComponent(Graphics g) {
+	public void paintComponent(final Graphics g) {
 		super.paintComponent(g);
 		log.debug("paint the GameCanvas");
-		
+
 		boardWidth = getWidth() - (2 * BORDER);
 		boardHeight = getHeight() - (2 * BORDER);
-		
+
 
 
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		drawBoard(g2d);
 
 		drawGrid(g2d);
-		
-		if(finished){
+
+		if (finished) {
 			drawFinish(g2d);
 		}
-		
+
 	}
 
-	private void drawFinish(Graphics2D g2d) {
+	private void drawFinish(final Graphics2D g2d) {
 		int finishBackgroundWidth = boardWidth / 2;
 		int finishBackgroundHeight = boardHeight / 2;
 
@@ -135,16 +139,16 @@ public class GameCanvas extends JPanel {
 		g2d.setFont(finishFont);
 	}
 
-	private void drawGrid(Graphics2D g2d) {
+	private void drawGrid(final Graphics2D g2d) {
 		// calculate the width and height of a single field
 		int gridWidth = boardWidth - (2 * BORDER_PADDING);
 		int gridHeight = boardWidth - (2 * BORDER_PADDING);
 
 		// The fieldWidth is the width of the grid divided by the number of
 		// fields
-		int fieldWidth = (int) gridWidth / grid.getWidth();
+		int fieldWidth = gridWidth / grid.getWidth();
 		// same for the Height
-		int fieldHeight = (int) gridHeight / grid.getHeight();
+		int fieldHeight = gridHeight / grid.getHeight();
 
 		int fieldStartPositionX = BORDER + BORDER_PADDING;
 		int fieldStartPositionY = BORDER + BORDER_PADDING;
@@ -183,7 +187,7 @@ public class GameCanvas extends JPanel {
 		}
 	}
 
-	private void drawBoard(Graphics2D g2d) {
+	private void drawBoard(final Graphics2D g2d) {
 		int shadowOffset = 2;
 
 		g2d.setColor(BOARD_BACKGROUND_COLOR);
@@ -210,16 +214,16 @@ public class GameCanvas extends JPanel {
 		g2d.draw(board);
 	}
 
-	public void repaintListener(@Observes RepaintEvent event) {
+	public void repaintListener(@Observes final RepaintEvent event) {
 		repaint();
 	}
 
-	public void finishListener(@Observes FinishEvent enent){
+	public void finishListener(@Observes final FinishEvent enent) {
 		finished = true;
 		repaint();
 	}
-	
-	public void gameRestartListener(@Observes GameRestartEvent event){
+
+	public void gameRestartListener(@Observes final GameRestartEvent event) {
 		finished = false;
 		repaint();
 	}
