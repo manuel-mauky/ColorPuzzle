@@ -5,17 +5,13 @@ import java.util.List;
 
 import eu.lestard.colorpuzzle.ai.ArtificialIntelligence;
 import eu.lestard.colorpuzzle.ai.BogoSolver;
-import eu.lestard.colorpuzzle.ai.BruteForceSolver;
 import eu.lestard.colorpuzzle.core.GameLogic;
 import eu.lestard.colorpuzzle.core.Grid;
 import eu.lestard.colorpuzzle.util.ColorChooser;
 import eu.lestard.colorpuzzle.util.Configurator;
-import eu.lestard.colorpuzzle.view.swing.SwingGUI;
 
 public class Benchmark {
 	
-	
-	private SwingGUI gui;
 	
 	private List<BenchmarkConfiguration> configurations;
 	
@@ -122,7 +118,7 @@ public class Benchmark {
 				System.out.print(".");
 				Grid grid = new Grid(Configurator.getHeight(),Configurator.getWidth(),new ColorChooser(Configurator.getColors()));
 				
-				GameLogic logic = new GameLogic(grid);
+				GameLogic logic = new GameLogic(grid, null, null, null);
 				
 //				logic.addFinishListener(new FinishListener(){
 //					

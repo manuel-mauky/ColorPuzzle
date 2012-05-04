@@ -42,12 +42,6 @@ public class ColorChooserTest {
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
-	public void testColorChooserFailNull(){
-		colorChooser = new ColorChooser(null);
-		
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
 	public void testFailNoColors(){
 		List<Color> colors = new ArrayList<Color>();
 		

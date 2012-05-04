@@ -1,15 +1,19 @@
 package eu.lestard.colorpuzzle.core;
 
-import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.lestard.colorpuzzle.util.ColorChooser;
+import eu.lestard.colorpuzzle.util.qualifier.FieldCountX;
+import eu.lestard.colorpuzzle.util.qualifier.FieldCountY;
 
 /**
  * The Grid class holds the array with the pieces of the puzzle. 
@@ -22,16 +26,14 @@ import eu.lestard.colorpuzzle.util.ColorChooser;
  * @author manuel mauky <manuel.mauky@googlemail.com>
  *
  */
+@Singleton
 public class Grid {
 
-	private Dimension dimension;
-	
+	private int height;
+	private int width;
 	
 	private Map<Point,Piece> gridMap;
 	private ColorChooser colorChooser;	
-	
-	private Canvas canvas;
-	
 	
 	
 	/**
@@ -43,8 +45,8 @@ public class Grid {
 	 * @param height
 	 * @param colorChooser
 	 */
-	public Grid(int width, int height, ColorChooser colorChooser){
-		
+	@Inject
+	public Grid(@FieldCountX int width, @FieldCountY int height, ColorChooser colorChooser){
 		if(width < 1){
 			throw new IllegalArgumentException("The width has to be at least 1");
 		}
@@ -52,34 +54,28 @@ public class Grid {
 		if(height < 1){
 			throw new IllegalArgumentException("The height has to be at least 1");
 		}
+
+		this.height = height;
+		this.width = width;
 		
-		if(colorChooser == null){
-			throw new NullPointerException("The colorChooser was null");
-		}
-		
-		
-		
-		dimension = new Dimension(width,height);
 		gridMap = new HashMap<Point,Piece>();
 		
 		this.colorChooser = colorChooser;
-		
-		fill();
-		
 	}
 	
 
 	public int getWidth(){
-		return dimension.width;
+		return width;
 	}
 	
 	public int getHeight(){
-		return dimension.height;
+		return height;
 	}
 
+	@PostConstruct
 	public void fill(){
-		for(int x=0 ; x<dimension.width ; x++){
-			for(int y=0 ; y<dimension.height ; y++){
+		for(int x=0 ; x<width ; x++){
+			for(int y=0 ; y<height ; y++){
 				
 				Point p = new Point(x,y);
 				
@@ -105,13 +101,35 @@ public class Grid {
 	 */
 	
 	public Piece getPiece(int x, int y){
-		
-		
 		Point p = new Point(x,y);
 		
 		return gridMap.get(p);		
 	}
 	
+	public boolean isSelected(int x, int y){
+		Point p = new Point(x, y);
+		
+		Piece piece = gridMap.get(p);
+		
+		return piece.isSelected();
+	}
+	
+	public Color getColor(int x, int y){
+		Point p = new Point(x, y);
+		
+		Piece piece = gridMap.get(p);
+		
+		return piece.getColor();
+	}
+	
+	public void setColor(int x, int y, Color color){
+		
+		Point p = new Point(x,y);
+		
+		Piece piece = gridMap.get(p);
+		
+		piece.setColor(color);
+	}
 	
 	/**
 	 * 
@@ -123,7 +141,7 @@ public class Grid {
 
 
 	public List<Piece> getPieces() {
-		return new ArrayList(gridMap.values());
+		return new ArrayList<Piece>(gridMap.values());
 	}
 	
 	

@@ -11,13 +11,8 @@ import eu.lestard.colorpuzzle.ai.BogoSolver;
 import eu.lestard.colorpuzzle.ai.BruteForceSolver;
 import eu.lestard.colorpuzzle.core.Shapes;
 
+@Deprecated
 public class Configurator {
-	
-	public static enum ColorProfile{
-		pastel,
-		blackWhite,
-		neon
-	}
 	
 	
 	private static int colorCount = 7;

@@ -5,67 +5,62 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.lestard.colorpuzzle.core.listener.FinishListener;
-import eu.lestard.colorpuzzle.core.listener.PointCountListener;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+
+import eu.lestard.colorpuzzle.view.events.ColorButtonPressedEvent;
+import eu.lestard.colorpuzzle.view.events.FinishEvent;
+import eu.lestard.colorpuzzle.view.events.GameRestartEvent;
+import eu.lestard.colorpuzzle.view.events.PointsEvent;
+import eu.lestard.colorpuzzle.view.events.RepaintEvent;
 
 
 public class GameLogic {
+	@Inject
+	Logger log;
+	
+	
 	private int counter = 0;
-	private Color selectedColor;
 	private Grid grid;
-	private boolean finished = false;
 	private List<Point> checkedPoints = new ArrayList<Point>();
 	
-	private List<FinishListener> finishListeners;
-	private List<PointCountListener> pointCountListeners;
+	private boolean finished = false;
 	
-	public GameLogic(Grid grid){
+	private Event<RepaintEvent> repaintEvent;
+	private Event<FinishEvent> finishEvent;
+	private Event<PointsEvent> pointsEvent;
+	
+	
+	@Inject
+	public GameLogic(Grid grid, Event<RepaintEvent> repaintEvent, Event<FinishEvent> finishEvent, Event<PointsEvent> pointsEvent){
 		this.grid = grid;
+		this.repaintEvent = repaintEvent;
+		this.finishEvent = finishEvent;
+		this.pointsEvent = pointsEvent;
+	}
+	
+	
+	public void colorChangedListener(@Observes ColorButtonPressedEvent event){
+		this.setColor(event.getColor());
+		checkAndSelect();
+		repaintEvent.fire(new RepaintEvent());
 		
-		pointCountListeners = new ArrayList<PointCountListener>();
-		finishListeners = new ArrayList<FinishListener>();
 	}
-	
-	
-	public void addPointCountListener(PointCountListener listener){
-		pointCountListeners.add(listener);
-	}
-	
-	public void removePointCountListener(PointCountListener listener){
-		pointCountListeners.remove(listener);
-	}
-	
-	public void notifiyPointCountListeners(){
-		for(PointCountListener p : pointCountListeners){
-			p.update(getCounter());
-		}
-	}
-	
-	
-	public void addFinishListener(FinishListener listener){
-		finishListeners.add(listener);
-	}
-	public void removeFinishListeners(FinishListener listener){
-		finishListeners.remove(listener);
-	}
-	public void notifyFinishListeners(){
-		for(FinishListener f : finishListeners){
-			f.update(isFinished());
-		}
-	}
-	
-	
 	
 	
 	public void setColor(Color color){
 		Point temp = findFirstSelectedField();
 		
-		if(color != grid.getPiece(temp.x,temp.y).getColor()){
+		if(color != grid.getColor(temp.x,temp.y)){
 			counter++;
 			for(int i=0 ; i<grid.getHeight() ; i++){
 				for(int j=0 ; j<grid.getWidth() ; j++){
-					if(grid.getPiece(i, j).isSelected()){
-						grid.getPiece(i, j).setColor(color);
+					
+					if(grid.isSelected(i, j)){
+						grid.setColor(i, j, color);
 					}
 				}				
 			}			
@@ -76,7 +71,7 @@ public class GameLogic {
 		for(int i=0 ; i<grid.getHeight() ; i++){
 			for(int j=0 ; j<grid.getWidth() ; j++){
 				
-				if (grid.getPiece(i,j).isSelected()){
+				if (grid.isSelected(i,j)){
 					return new Point(i,j);
 				}				
 			}
@@ -95,11 +90,11 @@ public class GameLogic {
 
 		checkNeighbours(temp);
 		
-		notifiyPointCountListeners();
+		pointsEvent.fire(new PointsEvent(getCounter()));
 		
 		if(checkedPoints.size() == grid.size()){
-			finished  = true;
-			notifyFinishListeners();
+			finishEvent.fire(new FinishEvent());
+			finished = true;
 		}
 	}
 
@@ -127,12 +122,13 @@ public class GameLogic {
 		points[3] = new Point(point.x, point.y + 1);
 		
 		for(int i=0 ; i<points.length ; i++){
+			
 			Piece temp = grid.getPiece(points[i].x, points[i].y);
 			if(temp == null){
 				continue;
 			}
 			
-			if(temp.getColor() == thisPiece.getColor()){
+			if(temp.getColor().equals(thisPiece.getColor())){
 				temp.setSelected(true);
 				checkNeighbours(points[i]);
 			}
@@ -146,23 +142,18 @@ public class GameLogic {
 		return counter;
 	}
 	
-	public boolean isFinished() {
-		return finished;
-	}
-	
-	public void setFinished(boolean finished) {
-		this.finished = finished;
-	}
-
-
 	public Grid getGrid() {
 		return grid;
 	}
 
-
-	public void reset() {
+	public void gameRestartListener(@Observes GameRestartEvent event){
 		counter = 0;
 		grid.fill();
+		finished = false;
+	}
+	
+	public boolean isFinished(){
+		return finished;
 	}
 
 }
