@@ -9,8 +9,6 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-
 import eu.lestard.colorpuzzle.view.events.ColorButtonPressedEvent;
 import eu.lestard.colorpuzzle.view.events.FinishEvent;
 import eu.lestard.colorpuzzle.view.events.GameRestartEvent;
@@ -19,9 +17,6 @@ import eu.lestard.colorpuzzle.view.events.RepaintEvent;
 
 
 public class GameLogic {
-	@Inject
-	Logger log;
-	
 	
 	private int counter = 0;
 	private Grid grid;

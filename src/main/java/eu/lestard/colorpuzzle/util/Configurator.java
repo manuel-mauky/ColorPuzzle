@@ -29,6 +29,8 @@ public class Configurator {
 //	private static ArtificialIntelligence ai = new BogoSolver();
 	private static ArtificialIntelligence ai = new BruteForceSolver();
 	
+	private Configurator(){
+	}
 	
 	private static int aiDelay = 200;
 

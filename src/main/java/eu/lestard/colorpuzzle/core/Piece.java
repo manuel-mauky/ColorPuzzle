@@ -12,8 +12,8 @@ public class Piece {
 	}
 
 	public Piece(Color color, boolean selected) {
-		setColor(color);
-		setSelected(selected);
+		this.color = color;
+		this.selected = selected;
 	}
 
 	public boolean isSelected() {
