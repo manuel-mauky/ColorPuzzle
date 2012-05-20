@@ -16,7 +16,10 @@ The goal is to get all squares on the field under your control with as few click
 Build the game
 --------------
 The project is maven based. To build the project simply run `mvn clean install`. 
-After this run `mvn assembly:single` to create the executable jar and package all needed libraries into a `zip` located in the `target` folder.
+After this run `mvn assembly:single` to create the executable jar and
+package all needed libraries into a `zip` located in the `target` folder.
+
+To play the game, unpack this zip to any location and run the jar-file inside the extracted folder (`java -jar colorPuzzle.jar`).
 
 
 

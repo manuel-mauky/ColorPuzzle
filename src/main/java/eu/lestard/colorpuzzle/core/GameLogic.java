@@ -153,6 +153,7 @@ public class GameLogic {
 	public void gameRestartListener(@Observes final GameRestartEvent event) {
 		counter = 0;
 		grid.fill();
+		checkAndSelect();
 		finished = false;
 	}
 
